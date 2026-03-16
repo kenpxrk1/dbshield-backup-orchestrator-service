@@ -9,4 +9,5 @@ public record BackupStartedEvent(
         String workerId,
         Instant startedAt
 
-) {}
+) {
+}

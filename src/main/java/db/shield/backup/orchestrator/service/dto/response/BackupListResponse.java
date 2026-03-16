@@ -6,4 +6,5 @@ public record BackupListResponse(
 
         List<BackupJobResponse> backups
 
-) {}
+) {
+}

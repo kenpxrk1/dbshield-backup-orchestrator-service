@@ -3,8 +3,16 @@ package db.shield.backup.orchestrator.service.model;
 
 import db.shield.backup.orchestrator.service.model.constant.BackupStatus;
 import db.shield.backup.orchestrator.service.model.constant.DatabaseType;
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -38,6 +46,7 @@ public class BackupJobEntity extends BaseEntity {
     @Column(name = "completed_at")
     private Instant completedAt;
 
+    @Builder.Default
     @Column(name = "retry_count")
     private Integer retryCount = 0;
 

@@ -24,3 +24,6 @@ spring:
     change-log: classpath:db/changelog/db.changelog-master.yaml
     default-schema: backup_service
     enabled: true
+
+  kafka:
+    bootstrap-servers: localhost:9092

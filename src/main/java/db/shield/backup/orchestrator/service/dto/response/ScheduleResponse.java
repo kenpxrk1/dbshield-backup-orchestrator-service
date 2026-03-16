@@ -9,4 +9,5 @@ public record ScheduleResponse(
         String cronExpression,
         boolean enabled
 
-) {}
+) {
+}

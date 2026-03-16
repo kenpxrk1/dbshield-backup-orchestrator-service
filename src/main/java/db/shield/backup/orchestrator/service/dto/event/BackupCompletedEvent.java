@@ -11,4 +11,5 @@ public record BackupCompletedEvent(
         long durationMs,
         Instant completedAt
 
-) {}
+) {
+}

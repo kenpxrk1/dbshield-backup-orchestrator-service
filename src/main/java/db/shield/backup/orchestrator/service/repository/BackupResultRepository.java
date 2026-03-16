@@ -6,4 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.UUID;
 
 public interface BackupResultRepository extends JpaRepository<BackupResultEntity, UUID> {
+
+    boolean existsByJobId(UUID jobId);
 }

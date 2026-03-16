@@ -10,4 +10,5 @@ public record BackupFailedEvent(
         boolean retryable,
         Instant failedAt
 
-) {}
+) {
+}

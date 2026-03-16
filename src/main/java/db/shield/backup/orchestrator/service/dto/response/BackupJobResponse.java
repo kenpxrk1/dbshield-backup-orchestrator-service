@@ -16,4 +16,5 @@ public record BackupJobResponse(
         Instant startedAt,
         Instant completedAt
 
-) {}
+) {
+}

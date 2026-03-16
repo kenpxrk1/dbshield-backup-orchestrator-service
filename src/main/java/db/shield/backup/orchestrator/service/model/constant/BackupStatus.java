@@ -9,4 +9,26 @@ public enum BackupStatus {
     COMPLETED,
     FAILED,
     CANCELLED
+
+    ;
+
+    public boolean canStart() {
+        return this == REQUESTED;
+    }
+
+    public boolean canComplete() {
+        return this == REQUESTED || this == STARTED || this == UPLOADING;
+    }
+
+    public boolean canFail() {
+        return this == REQUESTED || this == STARTED || this == UPLOADING;
+    }
+
+    public boolean canCancel() {
+        return this == PENDING || this == REQUESTED || this == STARTED || this == UPLOADING;
+    }
+
+    public boolean isFinal() {
+        return this == COMPLETED || this == FAILED || this == CANCELLED;
+    }
 }

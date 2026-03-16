@@ -12,4 +12,5 @@ public record BackupRequestedEvent(
         DatabaseType dbType,
         Instant requestedAt
 
-) {}
+) {
+}

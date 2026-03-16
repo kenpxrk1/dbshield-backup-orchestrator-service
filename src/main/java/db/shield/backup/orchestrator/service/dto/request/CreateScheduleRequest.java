@@ -8,4 +8,5 @@ public record CreateScheduleRequest(
         String cronExpression,
         boolean enabled
 
-) {}
+) {
+}

@@ -33,7 +33,7 @@ public class BaseEntity {
     @LastModifiedDate
     private Instant updatedAt;
 
-    protected void initId() {
+    public void initId() {
         if (this.id == null) {
             this.id = UUID.randomUUID();
         }

@@ -6,4 +6,5 @@ public record CreateBackupRequest(
 
         UUID databaseId
 
-) {}
+) {
+}
