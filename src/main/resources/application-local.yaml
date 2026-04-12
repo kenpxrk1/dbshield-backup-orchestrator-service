@@ -27,3 +27,7 @@ spring:
 
   kafka:
     bootstrap-servers: localhost:9092
+
+jwt:
+  secret-key: co7IB8BVZ2ZCWoyjnKbrX4ByykVOvY38vtv2DNK9kN4=
+  expire-time-access-token: 900000
