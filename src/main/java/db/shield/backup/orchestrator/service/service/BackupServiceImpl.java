@@ -1,11 +1,13 @@
 package db.shield.backup.orchestrator.service.service;
 
 import db.shield.backup.orchestrator.service.dto.event.BackupRequestedEvent;
+import db.shield.backup.orchestrator.service.dto.integration.response.DatabaseConfigurationResponse;
 import db.shield.backup.orchestrator.service.dto.request.CreateBackupRequest;
 import db.shield.backup.orchestrator.service.dto.response.BackupJobResponse;
 import db.shield.backup.orchestrator.service.event.BackupEventProducer;
 import db.shield.backup.orchestrator.service.exception.BackupJobNotFoundException;
 import db.shield.backup.orchestrator.service.exception.InvalidBackupJobStateException;
+import db.shield.backup.orchestrator.service.integration.internal.ConfigurationServiceClient;
 import db.shield.backup.orchestrator.service.mapper.BackupJobMapper;
 import db.shield.backup.orchestrator.service.model.BackupJobEntity;
 import db.shield.backup.orchestrator.service.model.BackupResultEntity;
@@ -32,11 +34,15 @@ public class BackupServiceImpl implements BackupService {
     private final BackupResultRepository backupResultRepository;
     private final BackupEventProducer eventProducer;
     private final BackupJobMapper mapper;
+    private final ConfigurationServiceClient configurationServiceClient;
 
     @Transactional
     @Override
     public BackupJobResponse createBackup(CreateBackupRequest request) {
+        DatabaseConfigurationResponse configurationResponse = configurationServiceClient.getById(request.databaseId());
+
         BackupJobEntity job = mapper.toNewJob(request);
+        job.setDbType(configurationResponse.dbType());
         backupJobRepository.save(job);
 
         BackupRequestedEvent event = buildRequestedEvent(job, job.getRequestedAt());

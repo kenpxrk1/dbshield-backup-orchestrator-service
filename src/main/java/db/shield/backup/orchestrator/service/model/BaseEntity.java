@@ -28,9 +28,10 @@ public class BaseEntity {
     @Column(nullable = false, updatable = false)
     private UUID id;
     @CreatedDate
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false, name = "created_at")
     private Instant createdAt;
     @LastModifiedDate
+    @Column(nullable = false, name = "updated_at")
     private Instant updatedAt;
 
     public void initId() {
