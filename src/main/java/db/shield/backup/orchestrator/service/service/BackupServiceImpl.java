@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 
@@ -48,7 +50,8 @@ public class BackupServiceImpl implements BackupService {
         BackupRequestedEvent event = buildRequestedEvent(job, job.getRequestedAt());
         eventProducer.sendBackupRequested(event);
 
-        log.info("Backup job created jobId={} databaseId={} status={} retryCount={}", job.getId(), job.getDatabaseId(), job.getStatus(), job.getRetryCount());
+        log.info("Backup job created jobId={} databaseId={} status={} retryCount={}", job.getId(), job.getDatabaseId(),
+                job.getStatus(), job.getRetryCount());
 
         return mapper.toResponse(job);
     }
@@ -192,6 +195,7 @@ public class BackupServiceImpl implements BackupService {
     }
 
     private BackupRequestedEvent buildRequestedEvent(BackupJobEntity job, Instant requestedAt) {
-        return new BackupRequestedEvent(job.getId(), job.getDatabaseId(), job.getDbType(), requestedAt);
+        return new BackupRequestedEvent(job.getId(), job.getDatabaseId(), job.getDbType(),
+                OffsetDateTime.ofInstant(requestedAt, ZoneId.systemDefault()));
     }
 }

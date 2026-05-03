@@ -17,8 +17,8 @@ public class SwaggerConfig {
     public OpenAPI getOpenApi() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Configuration-Service")
-                        .description("Service allows manage database configurations")
+                        .title("Backup-Orchestrator-Service")
+                        .description("Service allows manage and scheduling backups")
                 )
                 .addSecurityItem(new SecurityRequirement().addList("Bearer Authentication"))
                 .components(new Components().addSecuritySchemes("Bearer Authentication", createAPIKeyScheme()));

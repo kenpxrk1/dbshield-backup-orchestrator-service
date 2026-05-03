@@ -2,10 +2,12 @@ package db.shield.backup.orchestrator.service.service;
 
 import db.shield.backup.orchestrator.service.Initializer;
 import db.shield.backup.orchestrator.service.dto.event.BackupRequestedEvent;
+import db.shield.backup.orchestrator.service.dto.integration.response.DatabaseConfigurationResponse;
 import db.shield.backup.orchestrator.service.dto.response.BackupJobResponse;
 import db.shield.backup.orchestrator.service.event.BackupEventProducer;
 import db.shield.backup.orchestrator.service.exception.BackupJobNotFoundException;
 import db.shield.backup.orchestrator.service.exception.InvalidBackupJobStateException;
+import db.shield.backup.orchestrator.service.integration.internal.ConfigurationServiceClient;
 import db.shield.backup.orchestrator.service.mapper.BackupJobMapper;
 import db.shield.backup.orchestrator.service.model.BackupJobEntity;
 import db.shield.backup.orchestrator.service.model.BackupResultEntity;
@@ -45,6 +47,9 @@ class BackupServiceImplTest extends Initializer {
     @Mock
     private BackupJobMapper mapper;
 
+    @Mock
+    private ConfigurationServiceClient configurationServiceClient;
+
     @InjectMocks
     private BackupServiceImpl service;
 
@@ -61,6 +66,7 @@ class BackupServiceImplTest extends Initializer {
 
         BackupJobResponse response = backupJobResponse;
 
+        when(configurationServiceClient.getById(databaseId)).thenReturn(new DatabaseConfigurationResponse(DatabaseType.POSTGRES));
         when(mapper.toNewJob(createBackupRequest)).thenReturn(job);
         when(backupJobRepository.save(job)).thenReturn(job);
         when(mapper.toResponse(job)).thenReturn(response);
