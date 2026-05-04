@@ -56,6 +56,14 @@ databaseChangeLog:
                   name: error_message
                   type: TEXT
 
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+
         - createIndex:
             tableName: backup_job
             indexName: idx_backup_job_database
@@ -104,6 +112,22 @@ databaseChangeLog:
                   type: BOOLEAN
                   defaultValueBoolean: true
 
+              - column:
+                  name: last_run_at
+                  type: TIMESTAMP
+
+              - column:
+                  name: next_run_at
+                  type: TIMESTAMP
+
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+
   - changeSet:
       id: 2026.02.11-3
       author: kenpxrkasf@gmail.com
@@ -139,9 +163,43 @@ databaseChangeLog:
                   name: checksum
                   type: VARCHAR(255)
 
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+
         - createIndex:
             tableName: backup_result
             indexName: idx_backup_result_job
             columns:
               - column:
                   name: job_id
+
+  - changeSet:
+      id: 2026.02.11-4
+      author: kenpxrkasf@gmail.com
+
+      changes:
+
+        - createTable:
+            tableName: shedlock
+            columns:
+              - column:
+                  name: name
+                  type: VARCHAR(64)
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: lock_until
+                  type: TIMESTAMP(3) NULL
+              - column:
+                  name: locked_at
+                  type: TIMESTAMP(3) NULL
+              - column:
+                  name: locked_by
+                  type: VARCHAR(255)
+
+

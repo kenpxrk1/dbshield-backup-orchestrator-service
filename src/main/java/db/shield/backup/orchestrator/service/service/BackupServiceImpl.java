@@ -1,11 +1,13 @@
 package db.shield.backup.orchestrator.service.service;
 
 import db.shield.backup.orchestrator.service.dto.event.BackupRequestedEvent;
+import db.shield.backup.orchestrator.service.dto.integration.response.DatabaseConfigurationResponse;
 import db.shield.backup.orchestrator.service.dto.request.CreateBackupRequest;
 import db.shield.backup.orchestrator.service.dto.response.BackupJobResponse;
 import db.shield.backup.orchestrator.service.event.BackupEventProducer;
 import db.shield.backup.orchestrator.service.exception.BackupJobNotFoundException;
 import db.shield.backup.orchestrator.service.exception.InvalidBackupJobStateException;
+import db.shield.backup.orchestrator.service.integration.internal.ConfigurationServiceClient;
 import db.shield.backup.orchestrator.service.mapper.BackupJobMapper;
 import db.shield.backup.orchestrator.service.model.BackupJobEntity;
 import db.shield.backup.orchestrator.service.model.BackupResultEntity;
@@ -18,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,17 +36,22 @@ public class BackupServiceImpl implements BackupService {
     private final BackupResultRepository backupResultRepository;
     private final BackupEventProducer eventProducer;
     private final BackupJobMapper mapper;
+    private final ConfigurationServiceClient configurationServiceClient;
 
     @Transactional
     @Override
     public BackupJobResponse createBackup(CreateBackupRequest request) {
+        DatabaseConfigurationResponse configurationResponse = configurationServiceClient.getById(request.databaseId());
+
         BackupJobEntity job = mapper.toNewJob(request);
+        job.setDbType(configurationResponse.dbType());
         backupJobRepository.save(job);
 
         BackupRequestedEvent event = buildRequestedEvent(job, job.getRequestedAt());
         eventProducer.sendBackupRequested(event);
 
-        log.info("Backup job created jobId={} databaseId={} status={} retryCount={}", job.getId(), job.getDatabaseId(), job.getStatus(), job.getRetryCount());
+        log.info("Backup job created jobId={} databaseId={} status={} retryCount={}", job.getId(), job.getDatabaseId(),
+                job.getStatus(), job.getRetryCount());
 
         return mapper.toResponse(job);
     }
@@ -186,6 +195,7 @@ public class BackupServiceImpl implements BackupService {
     }
 
     private BackupRequestedEvent buildRequestedEvent(BackupJobEntity job, Instant requestedAt) {
-        return new BackupRequestedEvent(job.getId(), job.getDatabaseId(), job.getDbType(), requestedAt);
+        return new BackupRequestedEvent(job.getId(), job.getDatabaseId(), job.getDbType(),
+                OffsetDateTime.ofInstant(requestedAt, ZoneId.systemDefault()));
     }
 }
