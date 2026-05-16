@@ -3,3 +3,7 @@ databaseChangeLog:
   - include:
       file: "001-initial-tables.yaml"
       relativeToChangelogFile: true
+
+  - include:
+      file: "002-backup-event-outbox.yaml"
+      relativeToChangelogFile: true

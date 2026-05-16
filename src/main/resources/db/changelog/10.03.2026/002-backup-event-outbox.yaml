@@ -1,0 +1,108 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: 2026.03.25-1
+      author: codex
+      changes:
+
+        - createTable:
+            tableName: backup_event_outbox
+
+            columns:
+
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+
+              - column:
+                  name: topic
+                  type: VARCHAR(120)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: event_key
+                  type: VARCHAR(120)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: job_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: database_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: db_type
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: requested_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: status
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: attempt_count
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: next_attempt_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: last_error
+                  type: TEXT
+
+              - column:
+                  name: sent_at
+                  type: TIMESTAMP
+
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+
+        - createIndex:
+            tableName: backup_event_outbox
+            indexName: idx_backup_event_outbox_status_next_attempt
+            columns:
+              - column:
+                  name: status
+              - column:
+                  name: next_attempt_at
+
+        - createIndex:
+            tableName: backup_event_outbox
+            indexName: idx_backup_event_outbox_job_id
+            columns:
+              - column:
+                  name: job_id

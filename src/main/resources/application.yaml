@@ -34,3 +34,12 @@ spring:
       ack-mode: record
       concurrency: 6
       no-poll-threshold: 300000
+
+outbox:
+  enabled: ${OUTBOX_ENABLED:true}
+  dispatcher:
+    fixed-delay-ms: ${OUTBOX_DISPATCHER_FIXED_DELAY_MS:2000}
+    batch-size: ${OUTBOX_DISPATCHER_BATCH_SIZE:50}
+    max-attempts: ${OUTBOX_DISPATCHER_MAX_ATTEMPTS:50}
+    initial-backoff-ms: ${OUTBOX_DISPATCHER_INITIAL_BACKOFF_MS:1000}
+    max-backoff-ms: ${OUTBOX_DISPATCHER_MAX_BACKOFF_MS:60000}
